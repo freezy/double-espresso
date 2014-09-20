@@ -7,6 +7,17 @@ This fork packages a patched version of Espresso. Current fixes shipped are :
 [Issue 76](https://code.google.com/p/android-test-kit/issues/detail?id=76):	Support comparing CharSequences which are not Strings (patch included)
 [Issue 85](https://code.google.com/p/android-test-kit/issues/detail?id=85): Enhancement with Patch: Provide ability to viewMatch Spinner for selected item's toString
 
+To use this version, add the following maven repository to your build   :
+```groovy
+repositories {
+    maven { url 'https://raw.githubusercontent.com/tguerin/maven-repository/master' }
+}
+```
+
+And use the version __1.1-r3-patched__ for espresso artifact, there is no need to change espresso-support-v4 version :
+```groovy
+androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3-patched'
+```
 
 A pure Gradle port of the [Espresso][1] testing utility for Android!
 
