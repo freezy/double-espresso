@@ -1,5 +1,10 @@
-Double Espresso
-===============
+Double Espresso (Patched Espresso)
+==================================
+
+This fork packages a patched version of Espresso. Current fixes shipped are :
+
+[Issue 66](https://code.google.com/p/android-test-kit/issues/detail?id=66): Test hangs and timeout on setUp: GoogleInstumentation (ActivityFinisher) leaks activities between tests
+
 
 A pure Gradle port of the [Espresso][1] testing utility for Android!
 

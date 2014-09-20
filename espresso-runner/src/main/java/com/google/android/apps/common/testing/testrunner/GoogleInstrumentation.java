@@ -477,11 +477,11 @@ return GoogleInstrumentation.super.startActivitySync(intent);
     public void run() {
       List<Activity> activities = new ArrayList<Activity>();
 
-      for (Stage s : EnumSet.range(Stage.CREATED, Stage.PAUSED)) {
+      for (Stage s : EnumSet.range(Stage.CREATED, Stage.STOPPED)) {
         activities.addAll(lifecycleMonitor.getActivitiesInStage(s));
       }
 
-      Log.i(LOG_TAG, "Activities that are still in CREATED to PAUSED: " + activities.size());
+      Log.i(LOG_TAG, "Activities that are still in CREATED to STOPPED: " + activities.size());
 
       for (Activity activity : activities) {
         if (!activity.isFinishing()) {
