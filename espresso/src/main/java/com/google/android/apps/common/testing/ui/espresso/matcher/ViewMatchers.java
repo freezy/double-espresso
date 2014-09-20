@@ -1,34 +1,28 @@
 package com.google.android.apps.common.testing.ui.espresso.matcher;
 
-import static com.google.android.apps.common.testing.ui.espresso.util.TreeIterables.breadthFirstViewTraversal;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import static org.hamcrest.Matchers.is;
-
-import android.text.TextUtils;
-import com.google.android.apps.common.testing.ui.espresso.util.HumanReadables;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.Checkable;
+import android.widget.Spinner;
 import android.widget.TextView;
-
+import com.google.android.apps.common.testing.ui.espresso.util.HumanReadables;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import junit.framework.AssertionFailedError;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.StringDescription;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.*;
 
 import java.util.Iterator;
+
+import static com.google.android.apps.common.testing.ui.espresso.util.TreeIterables.breadthFirstViewTraversal;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+import static org.hamcrest.Matchers.is;
 
 /**
  * A collection of hamcrest matchers that match {@link View}s.
@@ -790,5 +784,91 @@ public final class ViewMatchers {
       throw new AssertionFailedError(description.toString());
     }
   }
+
+    /**
+     * Returns a matcher that matches a descendant of {@link Spinner} that is
+     * displaying the string of the selected item associated with the given
+     * resource id.
+     *
+     * @param resourceId
+     *            the string resource the text view is expected to hold.
+     */
+    public static Matcher<View> withSpinnerText(final int resourceId) {
+
+        return new BoundedMatcher<View, Spinner>(Spinner.class) {
+            private String resourceName = null;
+            private String expectedText = null;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with string from resource id: ");
+                description.appendValue(resourceId);
+                if (null != this.resourceName) {
+                    description.appendText("[");
+                    description.appendText(this.resourceName);
+                    description.appendText("]");
+                }
+                if (null != this.expectedText) {
+                    description.appendText(" value: ");
+                    description.appendText(this.expectedText);
+                }
+            }
+
+            @Override
+            public boolean matchesSafely(Spinner spinner) {
+                if (null == this.expectedText) {
+                    try {
+                        this.expectedText = spinner.getResources().getString(
+                                resourceId);
+                        this.resourceName = spinner.getResources()
+                                .getResourceEntryName(resourceId);
+                    } catch (Resources.NotFoundException ignored) {
+                        /*
+                         * view could be from a context unaware of the resource
+                         * id.
+                         */
+                    }
+                }
+                if (null != this.expectedText) {
+                    return this.expectedText.equals(spinner.getSelectedItem()
+                            .toString());
+                } else {
+                    return false;
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns a matcher that matches {@link Spinner}s based on toString value
+     * of the selected item. Note: Do not use null matcher.
+     *
+     * @param stringMatcher
+     *            {@link Matcher} of {@link String} with text to match
+     */
+    public static Matcher<View> withSpinnerText(
+            final Matcher<String> stringMatcher) {
+        checkNotNull(stringMatcher);
+        return new BoundedMatcher<View, Spinner>(Spinner.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text: ");
+                stringMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(Spinner spinner) {
+                return stringMatcher.matches(spinner.getSelectedItem()
+                        .toString());
+            }
+        };
+    }
+    /**
+     * Returns a matcher that matches {@link Spinner} based on it's selected item's toString value. Note: View's
+     * Sugar for withSpinnerText(is("string")).
+     */
+    public static Matcher<View> withSpinnerText(String text) {
+        return withSpinnerText(is(text));
+    }
 }
 
