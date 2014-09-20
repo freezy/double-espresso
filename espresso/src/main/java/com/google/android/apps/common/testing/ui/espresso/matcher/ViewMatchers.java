@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.is;
 
+import android.text.TextUtils;
 import com.google.android.apps.common.testing.ui.espresso.util.HumanReadables;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -417,7 +418,7 @@ public final class ViewMatchers {
           }
         }
         if (null != expectedText) {
-          return expectedText.equals(textView.getText());
+          return TextUtils.equals(expectedText, textView.getText());
         } else {
           return false;
         }
