@@ -14,9 +14,10 @@ repositories {
 }
 ```
 
-And use the version __1.1-r3-patched__ for espresso artifact, there is no need to change espresso-support-v4 version :
+And use the version __1.1-r3-patched__ for espresso artifacts :
 ```groovy
 androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3-patched'
+androidTestCompile 'com.jakewharton.espresso:espresso-support-v4:1.1-r3-patched'
 ```
 
 A pure Gradle port of the [Espresso][1] testing utility for Android!
