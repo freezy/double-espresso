@@ -465,7 +465,9 @@ final class UiControllerImpl implements UiController, Handler.Callback {
             String.format("%s: MessageQueue.next(): %s, with target: %s, callback: %s", TAG,
               messageString, message.getTarget().getClass().getCanonicalName(), callbackString));
         message.getTarget().dispatchMessage(message);
-        message.recycle();
+        if (Build.VERSION.SDK_INT < 21 ) {
+          message.recycle();
+        }
         loopCount++;
       }
       List<String> idleConditions = Lists.newArrayList();
