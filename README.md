@@ -1,5 +1,26 @@
-Double Espresso
-===============
+Double (Patched) Espresso
+===========================
+
+This fork packages a patched version of Espresso. Current fixes shipped are:
+
+* [Issue 66](https://code.google.com/p/android-test-kit/issues/detail?id=66): Test hangs and timeout on setUp: GoogleInstumentation (ActivityFinisher) leaks activities between tests
+* [Issue 76](https://code.google.com/p/android-test-kit/issues/detail?id=76):	Support comparing CharSequences which are not Strings (patch included)
+* [Issue 85](https://code.google.com/p/android-test-kit/issues/detail?id=85): Enhancement with Patch: Provide ability to viewMatch Spinner for selected item's toString
+
+To use this version, add the following maven repository to your build:
+```groovy
+repositories {
+    maven { url 'https://raw.githubusercontent.com/tguerin/maven-repository/master' }
+}
+```
+
+And use the version __1.1-r3-patched__ for espresso artifacts :
+```groovy
+androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3-patched'
+androidTestCompile 'com.jakewharton.espresso:espresso-support-v4:1.1-r3-patched'
+```
+
+*******************************************************************************
 
 A pure Gradle port of the [Espresso][1] testing utility for Android!
 

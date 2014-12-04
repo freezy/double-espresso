@@ -1,49 +1,19 @@
 package com.google.android.apps.common.testing.ui.espresso.matcher;
 
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.hasContentDescription;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.hasDescendant;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.hasImeAction;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.hasSibling;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isChecked;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isDescendantOfA;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isEnabled;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isFocusable;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isNotChecked;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isRoot;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.supportsInputMethods;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withChild;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withContentDescription;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withEffectiveVisibility;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withParent;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withTagKey;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withTagValue;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.is;
-
-import com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.Visibility;
-import com.google.android.apps.common.testing.ui.espresso.tester.test.R;
-
 import android.test.InstrumentationTestCase;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Checkable;
-import android.widget.CheckedTextView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.Spinner;
-import android.widget.TextView;
-
+import android.widget.*;
+import com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.*;
+import com.google.android.apps.common.testing.ui.espresso.tester.test.R;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+
+import java.util.ArrayList;
+
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.*;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Unit tests for {@link ViewMatchers}.
@@ -436,5 +406,53 @@ public class ViewMatchersTest extends InstrumentationTestCase {
     EditText editText = new EditText(getInstrumentation().getTargetContext());
     assertFalse(supportsInputMethods().matches(button));
     assertTrue(supportsInputMethods().matches(editText));
+  }
+
+    public void testWithSpinnerTextResourceId() {
+        Spinner spinner = new Spinner(this.getInstrumentation()
+                .getTargetContext());
+        ArrayList<String> vals = new ArrayList<String>();
+        vals.add(this.getInstrumentation().getTargetContext()
+                .getString(R.string.something));
+        vals.add(this.getInstrumentation().getTargetContext()
+                .getString(R.string.other_string));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this
+                .getInstrumentation().getTargetContext(),
+                android.R.layout.simple_spinner_item, vals);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+
+        assertTrue(withSpinnerText(R.string.something).matches(spinner));
+        assertFalse(withSpinnerText(R.string.other_string).matches(spinner));
+    }
+
+    public void testWithSpinnerTextString() {
+        Spinner spinner = new Spinner(this.getInstrumentation()
+                .getTargetContext());
+        ArrayList<String> vals = new ArrayList<String>();
+        vals.add("Hello World");
+        vals.add("Goodbye!!");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this
+                .getInstrumentation().getTargetContext(),
+                android.R.layout.simple_spinner_item, vals);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+        // spinner.setText(null);
+        // assertTrue(withSpinnerText(is("")).matches(spinner));
+        spinner.setSelection(0);
+        spinner.setTag("spinner");
+        // assertTrue(withTagValue(is((Object)"spinner")).matches(item)
+        assertTrue(withSpinnerText(is("Hello World")).matches(spinner));
+        assertFalse(withSpinnerText(is("Goodbye!!")).matches(spinner));
+        assertFalse(withSpinnerText(is("")).matches(spinner));
+    }
+
+    public void testWithSpinnerTextNull() {
+        try {
+            withSpinnerText((Matcher<String>) null);
+            fail("Should of thrown NPE");
+        } catch (NullPointerException e) {
+            // Good, this is expected.
+        }
   }
 }
