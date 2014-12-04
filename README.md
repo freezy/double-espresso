@@ -15,7 +15,7 @@ repositories {
 }
 ```
 
-And use the version __1.1-r3-patched__ for espresso artifacts :
+And use the version __1.1-r4-patched__ for espresso artifacts :
 ```groovy
 androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r4-patched'
 androidTestCompile 'com.jakewharton.espresso:espresso-support-v4:1.1-r4-patched'
