@@ -11,14 +11,14 @@ This fork packages a patched version of Espresso. Current fixes shipped are:
 To use this version, add the following maven repository to your build:
 ```groovy
 repositories {
-    maven { url 'https://raw.githubusercontent.com/tguerin/maven-repository/master' }
+    maven { url 'https://raw.githubusercontent.com/freezy/double-espresso/maven-repo' }
 }
 ```
 
 And use the version __1.1-r3-patched__ for espresso artifacts :
 ```groovy
-androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3-patched'
-androidTestCompile 'com.jakewharton.espresso:espresso-support-v4:1.1-r3-patched'
+androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r4-patched'
+androidTestCompile 'com.jakewharton.espresso:espresso-support-v4:1.1-r4-patched'
 ```
 
 *******************************************************************************
